@@ -21,6 +21,11 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
  * -- nunca se muda a {@code seguridad/} (ahí solo van
  * {@code JwtServicio}, {@code JwtFiltro}, {@code AuthController},
  * los DTOs de login y {@code BibliotecaUserDetailsService}).
+ *
+ * <p>Desde el Capítulo 15: {@code /actuator/health} e
+ * {@code /actuator/info} son públicos (los usa el healthcheck de
+ * Docker); el resto de {@code /actuator/**} (p. ej. {@code metrics})
+ * exige {@code ROLE_ADMIN}.
  */
 @Configuration
 @EnableWebSecurity
@@ -51,6 +56,8 @@ public class SeguridadConfig {
                         .requestMatchers(HttpMethod.GET, "/libros", "/libros/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/docs/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
+                        .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+                        .requestMatchers("/actuator/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST, "/libros").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/libros/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/libros/**").hasRole("ADMIN")

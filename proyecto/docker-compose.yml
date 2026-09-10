@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: biblioteca
+      POSTGRES_USER: biblioteca_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-cambia-esta-clave}
+    volumes:
+      - datos_biblioteca:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U biblioteca_user -d biblioteca"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  api:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:postgresql://db:5432/biblioteca
+      DB_USUARIO: biblioteca_user
+      DB_PASSWORD: ${DB_PASSWORD:-cambia-esta-clave}
+      PORT: 8080
+    ports:
+      - "8080:8080"
+
+volumes:
+  datos_biblioteca:
