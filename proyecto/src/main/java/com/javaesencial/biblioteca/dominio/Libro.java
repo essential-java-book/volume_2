@@ -1,5 +1,6 @@
 package com.javaesencial.biblioteca.dominio;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -12,16 +13,21 @@ import jakarta.validation.constraints.NotNull;
  * de {@code int} a {@code Integer} para poder anotarlo con
  * {@code @NotNull} (un {@code int} nunca es nulo).
  */
+@Schema(description = "Un libro del catálogo de la Biblioteca Municipal \"El Quijote\"")
 public class Libro {
 
+    @Schema(description = "Identificador único", example = "1")
     private Long id;
 
+    @Schema(description = "Título del libro", example = "El Quijote")
     @NotBlank(message = "El título es obligatorio")
     private String titulo;
 
+    @Schema(description = "Autor del libro", example = "Miguel de Cervantes")
     @NotBlank(message = "El autor es obligatorio")
     private String autor;
 
+    @Schema(description = "Año de publicación", example = "1605")
     @NotNull(message = "El año es obligatorio")
     private Integer anio;
 
