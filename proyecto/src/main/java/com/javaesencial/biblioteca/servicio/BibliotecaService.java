@@ -1,6 +1,7 @@
 package com.javaesencial.biblioteca.servicio;
 
 import com.javaesencial.biblioteca.dominio.Libro;
+import com.javaesencial.biblioteca.dominio.LibroNoEncontradoException;
 import com.javaesencial.biblioteca.repositorio.RepositorioLibros;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,17 +36,24 @@ public class BibliotecaService {
         return repositorio.findById(id);
     }
 
+    public Libro buscarPorIdOFallar(Long id) {
+        return buscarPorId(id).orElseThrow(() -> new LibroNoEncontradoException(id));
+    }
+
     public Libro registrar(Libro libro) {
         Libro creado = repositorio.agregar(libro);
         log.info("Libro registrado: {} (id={})", creado.getTitulo(), creado.getId());
         return creado;
     }
 
-    public Optional<Libro> actualizar(Long id, Libro datos) {
-        return repositorio.actualizar(id, datos);
+    public Libro actualizar(Long id, Libro datos) {
+        return repositorio.actualizar(id, datos)
+                .orElseThrow(() -> new LibroNoEncontradoException(id));
     }
 
-    public boolean eliminar(Long id) {
-        return repositorio.eliminar(id);
+    public void eliminar(Long id) {
+        if (!repositorio.eliminar(id)) {
+            throw new LibroNoEncontradoException(id);
+        }
     }
 }

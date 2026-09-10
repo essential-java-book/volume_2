@@ -2,8 +2,8 @@ package com.javaesencial.biblioteca.controlador;
 
 import com.javaesencial.biblioteca.dominio.Libro;
 import com.javaesencial.biblioteca.servicio.BibliotecaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,30 +24,24 @@ public class LibroController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Libro> obtenerPorId(@PathVariable Long id) {
-        return service.buscarPorId(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Libro obtenerPorId(@PathVariable Long id) {
+        return service.buscarPorIdOFallar(id);
     }
 
     @PostMapping
-    public ResponseEntity<Libro> crear(@RequestBody Libro libro) {
-        Libro creado = service.registrar(libro);
-        return ResponseEntity.status(HttpStatus.CREATED).body(creado);
+    @ResponseStatus(HttpStatus.CREATED)
+    public Libro crear(@Valid @RequestBody Libro libro) {
+        return service.registrar(libro);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Libro> actualizar(@PathVariable Long id, @RequestBody Libro libro) {
-        return service.actualizar(id, libro)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Libro actualizar(@PathVariable Long id, @Valid @RequestBody Libro libro) {
+        return service.actualizar(id, libro);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> eliminar(@PathVariable Long id) {
-        if (service.eliminar(id)) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void eliminar(@PathVariable Long id) {
+        service.eliminar(id);
     }
 }
