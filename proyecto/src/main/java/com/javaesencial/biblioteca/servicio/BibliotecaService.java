@@ -2,6 +2,8 @@ package com.javaesencial.biblioteca.servicio;
 
 import com.javaesencial.biblioteca.dominio.Libro;
 import com.javaesencial.biblioteca.repositorio.RepositorioLibros;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,8 @@ import java.util.Optional;
 @Service
 public class BibliotecaService {
 
+    private static final Logger log = LoggerFactory.getLogger(BibliotecaService.class);
+
     private final RepositorioLibros repositorio;
 
     public BibliotecaService(RepositorioLibros repositorio) {
@@ -22,7 +26,9 @@ public class BibliotecaService {
     }
 
     public List<Libro> obtenerTodos() {
-        return repositorio.findAll();
+        List<Libro> libros = repositorio.findAll();
+        log.debug("Devolviendo {} libros del catálogo", libros.size());
+        return libros;
     }
 
     public Optional<Libro> buscarPorId(Long id) {
