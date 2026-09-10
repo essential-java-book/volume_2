@@ -1,6 +1,6 @@
-INSERT INTO libro (titulo, autor, anio) VALUES ('El Quijote', 'Miguel de Cervantes', 1605);
-INSERT INTO libro (titulo, autor, anio) VALUES ('1984', 'George Orwell', 1949);
-INSERT INTO libro (titulo, autor, anio) VALUES ('Dune', 'Frank Herbert', 1965);
+INSERT INTO libro (titulo, autor, anio, isbn) VALUES ('El Quijote', 'Miguel de Cervantes', 1605, '978-84-376-0494-7');
+INSERT INTO libro (titulo, autor, anio, isbn) VALUES ('1984', 'George Orwell', 1949, '978-84-663-2674-7');
+INSERT INTO libro (titulo, autor, anio, isbn) VALUES ('Dune', 'Frank Herbert', 1965, '978-84-450-7715-6');
 
 INSERT INTO usuario (nombre, email) VALUES ('Ana García', 'ana@bib.es');
 INSERT INTO usuario (nombre, email) VALUES ('Pedro López', 'pedro@bib.es');

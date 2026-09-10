@@ -40,6 +40,9 @@ public class Libro {
     @NotNull(message = "El año es obligatorio")
     private Integer anio;
 
+    @Schema(description = "ISBN (opcional, vuelve al catálogo en el Capítulo 12)", example = "978-84-376-0494-7")
+    private String isbn;
+
     public Libro() {
     }
 
@@ -48,6 +51,11 @@ public class Libro {
         this.titulo = titulo;
         this.autor = autor;
         this.anio = anio;
+    }
+
+    public Libro(Long id, String titulo, String autor, Integer anio, String isbn) {
+        this(id, titulo, autor, anio);
+        this.isbn = isbn;
     }
 
     public Long getId() {
@@ -80,5 +88,13 @@ public class Libro {
 
     public void setAnio(Integer anio) {
         this.anio = anio;
+    }
+
+    public String getIsbn() {
+        return isbn;
+    }
+
+    public void setIsbn(String isbn) {
+        this.isbn = isbn;
     }
 }
