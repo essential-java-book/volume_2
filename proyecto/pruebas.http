@@ -35,3 +35,15 @@ Content-Type: application/json
 
 ###
 DELETE http://localhost:8080/libros/4
+
+### Capítulo 10 -- préstamos (relaciones JPA)
+GET http://localhost:8080/prestamos
+
+###
+GET http://localhost:8080/prestamos/usuario/1
+
+###
+POST http://localhost:8080/prestamos/usuario/2/libro/3
+
+###
+PATCH http://localhost:8080/prestamos/1/devolucion
