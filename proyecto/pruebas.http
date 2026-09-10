@@ -6,3 +6,32 @@ GET http://localhost:8080/hola
 
 ###
 GET http://localhost:8080/libro-ejemplo
+
+### Capítulo 5 -- CRUD completo de libros
+GET http://localhost:8080/libros
+
+###
+GET http://localhost:8080/libros/1
+
+###
+POST http://localhost:8080/libros
+Content-Type: application/json
+
+{
+  "titulo": "Fahrenheit 451",
+  "autor": "Ray Bradbury",
+  "anio": 1953
+}
+
+###
+PUT http://localhost:8080/libros/1
+Content-Type: application/json
+
+{
+  "titulo": "El Quijote",
+  "autor": "Miguel de Cervantes",
+  "anio": 1605
+}
+
+###
+DELETE http://localhost:8080/libros/4

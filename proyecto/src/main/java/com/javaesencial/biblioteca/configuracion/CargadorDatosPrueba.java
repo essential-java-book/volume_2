@@ -23,8 +23,8 @@ public class CargadorDatosPrueba {
 
     @PostConstruct
     public void cargar() {
-        repositorio.agregar(new Libro(1L, "El Quijote", "Miguel de Cervantes", 1605));
-        repositorio.agregar(new Libro(2L, "1984", "George Orwell", 1949));
-        repositorio.agregar(new Libro(3L, "Dune", "Frank Herbert", 1965));
+        repositorio.agregar(new Libro(null, "El Quijote", "Miguel de Cervantes", 1605));
+        repositorio.agregar(new Libro(null, "1984", "George Orwell", 1949));
+        repositorio.agregar(new Libro(null, "Dune", "Frank Herbert", 1965));
     }
 }

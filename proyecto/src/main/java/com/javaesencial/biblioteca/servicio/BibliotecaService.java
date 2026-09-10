@@ -34,4 +34,18 @@ public class BibliotecaService {
     public Optional<Libro> buscarPorId(Long id) {
         return repositorio.findById(id);
     }
+
+    public Libro registrar(Libro libro) {
+        Libro creado = repositorio.agregar(libro);
+        log.info("Libro registrado: {} (id={})", creado.getTitulo(), creado.getId());
+        return creado;
+    }
+
+    public Optional<Libro> actualizar(Long id, Libro datos) {
+        return repositorio.actualizar(id, datos);
+    }
+
+    public boolean eliminar(Long id) {
+        return repositorio.eliminar(id);
+    }
 }

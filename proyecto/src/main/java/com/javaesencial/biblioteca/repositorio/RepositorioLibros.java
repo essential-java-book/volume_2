@@ -6,6 +6,7 @@ import org.springframework.stereotype.Repository;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * Repositorio en memoria -- heredero declarado de {@code Repositorio<T>}
@@ -14,12 +15,13 @@ import java.util.Optional;
  *
  * Desde el Capítulo 4 ya no carga datos por sí mismo: los datos de
  * prueba los añade {@code CargadorDatosPrueba}, solo en el perfil
- * {@code dev} (así el repositorio nace vacío en producción).
+ * {@code dev}. Desde el Capítulo 5 soporta el CRUD completo.
  */
 @Repository
 public class RepositorioLibros {
 
     private final List<Libro> libros = new ArrayList<>();
+    private final AtomicLong secuencia = new AtomicLong(0);
 
     public List<Libro> findAll() {
         return libros;
@@ -32,7 +34,21 @@ public class RepositorioLibros {
     }
 
     public Libro agregar(Libro libro) {
+        libro.setId(secuencia.incrementAndGet());
         libros.add(libro);
         return libro;
+    }
+
+    public Optional<Libro> actualizar(Long id, Libro datos) {
+        return findById(id).map(libro -> {
+            libro.setTitulo(datos.getTitulo());
+            libro.setAutor(datos.getAutor());
+            libro.setAnio(datos.getAnio());
+            return libro;
+        });
+    }
+
+    public boolean eliminar(Long id) {
+        return libros.removeIf(libro -> libro.getId().equals(id));
     }
 }
