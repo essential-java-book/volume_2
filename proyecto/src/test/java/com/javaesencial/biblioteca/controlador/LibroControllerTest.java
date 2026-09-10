@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -15,6 +17,7 @@ import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.isNull;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -38,14 +41,15 @@ class LibroControllerTest {
     private BibliotecaService service;
 
     @Test
-    void listarTodosDevuelveElCatalogo() throws Exception {
+    void listarTodosDevuelveElCatalogoPaginado() throws Exception {
         Libro elQuijote = new Libro(1L, "El Quijote", "Miguel de Cervantes", 1605);
-        when(service.obtenerTodos()).thenReturn(List.of(elQuijote));
+        Page<Libro> pagina = new PageImpl<>(List.of(elQuijote));
+        when(service.obtenerTodosPaginado(any(), isNull())).thenReturn(pagina);
 
         mockMvc.perform(get("/libros"))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.length()").value(1))
-                .andExpect(jsonPath("$[0].titulo").value("El Quijote"));
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content[0].titulo").value("El Quijote"));
     }
 
     @Test

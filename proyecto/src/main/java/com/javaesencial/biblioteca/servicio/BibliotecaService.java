@@ -5,6 +5,8 @@ import com.javaesencial.biblioteca.dominio.LibroNoEncontradoException;
 import com.javaesencial.biblioteca.repositorio.LibroJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,6 +32,13 @@ public class BibliotecaService {
         List<Libro> libros = repositorio.findAll();
         log.debug("Devolviendo {} libros del catálogo", libros.size());
         return libros;
+    }
+
+    public Page<Libro> obtenerTodosPaginado(Pageable pageable, String buscar) {
+        if (buscar == null || buscar.isBlank()) {
+            return repositorio.findAll(pageable);
+        }
+        return repositorio.buscarPorTextoPaginado(buscar, pageable);
     }
 
     public Optional<Libro> buscarPorId(Long id) {

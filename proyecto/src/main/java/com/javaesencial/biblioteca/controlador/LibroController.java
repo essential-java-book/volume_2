@@ -8,10 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Tag(name = "Libros", description = "Catálogo de la Biblioteca")
 @RestController
@@ -24,10 +26,20 @@ public class LibroController {
         this.service = service;
     }
 
-    @Operation(summary = "Lista todos los libros del catálogo")
+    @Operation(summary = "Lista el catálogo, paginado y con búsqueda opcional")
     @GetMapping
-    public List<Libro> listarTodos() {
-        return service.obtenerTodos();
+    public Page<Libro> listarTodos(
+            @RequestParam(defaultValue = "0") int pagina,
+            @RequestParam(defaultValue = "10") int tamanio,
+            @RequestParam(defaultValue = "titulo") String orden,
+            @RequestParam(defaultValue = "asc") String direccion,
+            @RequestParam(required = false) String buscar) {
+
+        Sort.Direction sentido = "desc".equalsIgnoreCase(direccion)
+                ? Sort.Direction.DESC
+                : Sort.Direction.ASC;
+        Pageable pageable = PageRequest.of(pagina, tamanio, Sort.by(sentido, orden));
+        return service.obtenerTodosPaginado(pageable, buscar);
     }
 
     @Operation(summary = "Obtiene un libro por id")
