@@ -1,0 +1,8 @@
+### Java Esencial -- Volumen 2 -- peticiones de prueba
+### Se amplía capítulo a capítulo (caps. 2, 5, 6, 10, 11, 13, 14).
+
+### Capítulo 2 -- primeras peticiones
+GET http://localhost:8080/hola
+
+###
+GET http://localhost:8080/libro-ejemplo
