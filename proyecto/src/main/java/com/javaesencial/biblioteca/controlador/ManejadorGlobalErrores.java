@@ -5,6 +5,7 @@ import com.javaesencial.biblioteca.dominio.PrestamoNoEncontradoException;
 import com.javaesencial.biblioteca.dominio.UsuarioNoEncontradoException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -39,6 +40,11 @@ public class ManejadorGlobalErrores {
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining("; "));
         return problema(HttpStatus.BAD_REQUEST, "Datos de entrada no válidos", detalle);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ProblemDetail manejarCredencialesInvalidas(BadCredentialsException ex) {
+        return problema(HttpStatus.UNAUTHORIZED, "Credenciales inválidas", ex.getMessage());
     }
 
     private ProblemDetail problema(HttpStatus estado, String titulo, String detalle) {

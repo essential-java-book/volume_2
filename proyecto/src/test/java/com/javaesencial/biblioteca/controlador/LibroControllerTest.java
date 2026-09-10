@@ -5,6 +5,8 @@ import com.javaesencial.biblioteca.configuracion.SeguridadConfig;
 import com.javaesencial.biblioteca.dominio.Libro;
 import com.javaesencial.biblioteca.dominio.LibroNoEncontradoException;
 import com.javaesencial.biblioteca.seguridad.BibliotecaUserDetailsService;
+import com.javaesencial.biblioteca.seguridad.JwtFiltro;
+import com.javaesencial.biblioteca.seguridad.JwtServicio;
 import com.javaesencial.biblioteca.servicio.BibliotecaService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +34,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
  * del resto de la aplicación con {@code @WebMvcTest}. Desde el
  * Capítulo 13 hay que importar {@code SeguridadConfig} explícitamente
  * (no forma parte del slice web por defecto) y autenticar con
- * {@code @WithMockUser} las peticiones que ya no son públicas.
+ * {@code @WithMockUser} las peticiones que ya no son públicas. Desde
+ * el Capítulo 14, {@code SeguridadConfig} exige un {@code JwtFiltro}
+ * como colaborador, así que también se importa y se sustituye
+ * {@code JwtServicio} por un mock (los tests siguen autenticando con
+ * {@code @WithMockUser}, no con tokens reales).
  */
 @WebMvcTest(LibroController.class)
-@Import(SeguridadConfig.class)
+@Import({SeguridadConfig.class, JwtFiltro.class})
 class LibroControllerTest {
 
     @Autowired
@@ -49,6 +55,9 @@ class LibroControllerTest {
 
     @MockBean
     private BibliotecaUserDetailsService userDetailsService;
+
+    @MockBean
+    private JwtServicio jwtServicio;
 
     @Test
     void listarTodosDevuelveElCatalogoPaginado() throws Exception {

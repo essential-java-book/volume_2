@@ -1,5 +1,8 @@
 ### Java Esencial -- Volumen 2 -- peticiones de prueba
-### Se amplía capítulo a capítulo (caps. 2, 5, 6, 10, 11, 13, 14).
+### Se amplía capítulo a capítulo (caps. 2, 5, 6, 10, 11, 14).
+### El Capítulo 13 (HTTP Basic) queda sustituido por el Capítulo 14
+### (JWT stateless); no se documentan peticiones Basic aquí porque
+### ya no forman parte del estado final del proyecto.
 
 ### Capítulo 2 -- primeras peticiones
 GET http://localhost:8080/hola
@@ -47,3 +50,38 @@ POST http://localhost:8080/prestamos/usuario/2/libro/3
 
 ###
 PATCH http://localhost:8080/prestamos/1/devolucion
+
+### Capítulo 11 -- paginación, orden y búsqueda
+GET http://localhost:8080/libros?pagina=0&tamanio=5&orden=titulo&direccion=asc
+
+###
+GET http://localhost:8080/libros?buscar=quijote
+
+### Capítulo 14 -- autenticación con JWT
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
+
+### Guarda el "token" de la respuesta anterior y úsalo aquí:
+POST http://localhost:8080/libros
+Authorization: Bearer PEGA_AQUI_EL_TOKEN
+Content-Type: application/json
+
+{
+  "titulo": "Fahrenheit 451",
+  "autor": "Ray Bradbury",
+  "anio": 1953
+}
+
+###
+POST http://localhost:8080/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "contraseña-incorrecta"
+}

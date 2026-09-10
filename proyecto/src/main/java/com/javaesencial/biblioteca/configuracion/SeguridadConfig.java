@@ -1,5 +1,6 @@
 package com.javaesencial.biblioteca.configuracion;
 
+import com.javaesencial.biblioteca.seguridad.JwtFiltro;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -11,18 +12,15 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
- * Autenticación HTTP Basic y autorización por rol. El Capítulo 14 la
- * reescribe para JWT (sin {@code httpBasic}, con {@code JwtFiltro}),
- * pero esta clase se queda siempre en {@code configuracion/} -- nunca
- * se muda a {@code seguridad/}.
- *
- * Nota sobre este repositorio: en el manuscrito las reglas por rol
- * solo aparecen como práctica opcional (13.1); aquí se implementan
- * directamente para que el estado final del volumen (tabla de
- * endpoints del Capítulo 15) sea coherente sin depender de un
- * ejercicio no incluido en este repositorio.
+ * Desde el Capítulo 14: sin {@code httpBasic}, autenticación JWT
+ * stateless con {@code JwtFiltro} antes del filtro estándar de
+ * usuario/contraseña. Sigue viviendo en {@code configuracion/}
+ * -- nunca se muda a {@code seguridad/} (ahí solo van
+ * {@code JwtServicio}, {@code JwtFiltro}, {@code AuthController},
+ * los DTOs de login y {@code BibliotecaUserDetailsService}).
  */
 @Configuration
 @EnableWebSecurity
@@ -43,7 +41,7 @@ public class SeguridadConfig {
     }
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtFiltro jwtFiltro) throws Exception {
         http
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session ->
@@ -51,14 +49,14 @@ public class SeguridadConfig {
                 .headers(headers -> headers.frameOptions(frame -> frame.sameOrigin()))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/libros", "/libros/**").permitAll()
+                        .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/docs/**", "/v3/api-docs/**", "/h2-console/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/libros").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.PUT, "/libros/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/libros/**").hasRole("ADMIN")
                         .requestMatchers("/prestamos/**").hasAnyRole("ADMIN", "USER")
                         .anyRequest().authenticated())
-                .httpBasic(basic -> {
-                });
+                .addFilterBefore(jwtFiltro, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
