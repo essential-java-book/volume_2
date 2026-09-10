@@ -1,4 +1,4 @@
-package com.javaesencial.biblioteca;
+package com.javaesencial.biblioteca.controlador;
 
 /**
  * DTO de respuesta para el endpoint de prueba {@code /libro-ejemplo}.
