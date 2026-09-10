@@ -1,6 +1,11 @@
 package com.javaesencial.biblioteca.dominio;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
@@ -9,13 +14,17 @@ import jakarta.validation.constraints.NotNull;
  * para aprender Spring (sin precio, stock ni género). El ISBN vuelve
  * en el Capítulo 12; hasta entonces, id + título + autor + año.
  *
- * Desde el Capítulo 6, validado con Bean Validation: {@code anio} pasa
- * de {@code int} a {@code Integer} para poder anotarlo con
- * {@code @NotNull} (un {@code int} nunca es nulo).
+ * Desde el Capítulo 9, entidad JPA: Hibernate genera la tabla
+ * {@code libro} y {@code LibroJpaRepository} sustituye a
+ * {@code RepositorioLibros}.
  */
 @Schema(description = "Un libro del catálogo de la Biblioteca Municipal \"El Quijote\"")
+@Entity
+@Table(name = "libro")
 public class Libro {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Schema(description = "Identificador único", example = "1")
     private Long id;
 
