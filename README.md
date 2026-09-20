@@ -17,7 +17,7 @@ prácticas, los tests de repaso y las chuletas de cada capítulo.
 | `proyecto/` | El Proyecto Biblioteca (Maven, Spring Boot). Un tag por capítulo (`v2-cap01` … `v2-cap15`); `v2.0.0` es el estado final del volumen. |
 | `practicas/` | Solución de cada práctica del libro, en `capNN/practicaN.M.md` (56 prácticas). |
 | `quizzes/` | Tests de conocimientos interactivos por capítulo. Pendiente. |
-| `cheatsheets/` | Chuletas de una página por capítulo, en `capNN.md` (15). |
+| `cheatsheets/` | Chuletas de una página por capítulo, en PDF, `capNN.pdf` (15). |
 | `tools/` | Scripts para verificar el proyecto capítulo a capítulo (Linux/macOS: `.sh`; Windows: `.ps1`). |
 
 ## El proyecto capítulo a capítulo
